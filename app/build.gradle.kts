@@ -37,7 +37,30 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.room.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Lifecycle components (ViewModel, LiveData, Extensions)
+    implementation(libs.lifecycle.extensions)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.livedata)
+
+// Retrofit (Networking & JSON parsing)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+// Glide (Image Loading)
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+
+// RecyclerView and CardView (UI components)
+    implementation(libs.recyclerview)
+    implementation(libs.cardview)
+
+// Room (Database)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+
 }
