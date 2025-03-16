@@ -2,7 +2,6 @@ package com.carlosribeiro.culixpress.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -13,11 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.carlosribeiro.culixpress.R;
 import com.carlosribeiro.culixpress.data.local.SessionManager;
-import com.carlosribeiro.culixpress.model.Recipe;
-import com.carlosribeiro.culixpress.ui.adapters.RecipeAdapter;
 import com.carlosribeiro.culixpress.viewmodel.RecipesViewModel;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,12 +36,13 @@ public class MainActivity extends AppCompatActivity {
         if (!sessionManager.isUserLoggedIn()) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+            return; // Evita continuar executando código desnecessariamente
         }
 
         // Configurar RecyclerView
         recyclerView = findViewById(R.id.recyclerViewRecipes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recipeAdapter = new RecipeAdapter();
+        recipeAdapter = new RecipeAdapter(new ArrayList<>()); // Passando lista vazia no construtor
         recyclerView.setAdapter(recipeAdapter);
 
         // Inicializar ViewModel

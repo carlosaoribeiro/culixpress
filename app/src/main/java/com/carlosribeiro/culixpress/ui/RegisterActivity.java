@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         AuthViewModel viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        viewModel.authSuccess.observe(this, success -> {
+        viewModel.getAuthSuccess().observe(this, success -> {
             if(success){
                 Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
                 finish(); // Volta automaticamente para o login

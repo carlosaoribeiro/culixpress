@@ -9,19 +9,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import com.carlosribeiro.culixpress.ui.MainActivity;
-
-
 
 import com.carlosribeiro.culixpress.R;
 import com.carlosribeiro.culixpress.data.local.SessionManager;
 import com.carlosribeiro.culixpress.viewmodel.AuthViewModel;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText loginEmail, loginPassword;
     private Button buttonLogin;
-    private TextView textToRegister;
+    private TextView textToRegister, textForgotPassword;
     private AuthViewModel viewModel;
     private SessionManager sessionManager;
 
@@ -30,10 +28,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginEmail = findViewById(R.id.loginEmail);
-        loginPassword = findViewById(R.id.loginPassword);
+        // Esconder a Action Bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        // Inicializando os elementos do layout
+        TextInputLayout loginEmailLayout = findViewById(R.id.loginEmailLayout);
+        TextInputLayout loginPasswordLayout = findViewById(R.id.loginPasswordLayout);
+
+        loginEmail = loginEmailLayout != null ? loginEmailLayout.getEditText() : null;
+        loginPassword = loginPasswordLayout != null ? loginPasswordLayout.getEditText() : null;
+
         buttonLogin = findViewById(R.id.buttonLogin);
         textToRegister = findViewById(R.id.textToRegister);
+        textForgotPassword = findViewById(R.id.textForgotPassword);
 
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         sessionManager = new SessionManager(this);
@@ -42,23 +51,39 @@ public class LoginActivity extends AppCompatActivity {
         if (sessionManager.isUserLoggedIn()) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
+            return;
         }
 
         buttonLogin.setOnClickListener(view -> {
+            if (loginEmail == null || loginPassword == null) {
+                Toast.makeText(this, "Erro ao carregar os campos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String email = loginEmail.getText().toString().trim();
             String pass = loginPassword.getText().toString().trim();
 
-            if(email.isEmpty() || pass.isEmpty()) {
+            if (email.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             } else {
                 viewModel.login(email, pass);
             }
         });
 
-        viewModel.authSuccess.observe(this, success -> {
-            if(success){
+        textForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
+
+        viewModel.getAuthSuccess().observe(this, success -> {
+            if (success) {
                 Toast.makeText(this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show();
-                sessionManager.saveUserSession(loginEmail.getText().toString().trim());
+
+                String email = loginEmail != null ? loginEmail.getText().toString().trim() : "";
+                String name = "Usuário Padrão"; // Caso não tenha um campo de nome
+
+                sessionManager.saveUserSession(email, name);
+
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
             } else {
