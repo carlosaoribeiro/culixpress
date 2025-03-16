@@ -5,32 +5,35 @@ import android.content.SharedPreferences;
 
 public class SessionManager {
     private static final String PREF_NAME = "user_session";
-    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
-    private static final String KEY_USER_EMAIL = "userEmail";
+    private static final String KEY_EMAIL = "user_email";
+    private static final String KEY_NAME = "user_name";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
 
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
     public SessionManager(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = prefs.edit();
     }
 
-    public void saveUserSession(String email) {
+    public void saveUserSession(String email, String name) {
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_NAME, name);
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        editor.putString(KEY_USER_EMAIL, email);
         editor.apply();
     }
 
+    public String getUserName() {
+        return prefs.getString(KEY_NAME, "Usuário");
+    }
+
     public boolean isUserLoggedIn() {
-        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
+        return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
-    public String getUserEmail() {
-        return sharedPreferences.getString(KEY_USER_EMAIL, null);
-    }
-
-    public void logoutUser() {
+    // ✅ Método corrigido para fazer logout corretamente
+    public void logout() {
         editor.clear();
         editor.apply();
     }

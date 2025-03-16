@@ -1,5 +1,6 @@
 package com.carlosribeiro.culixpress.model;
 
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -7,9 +8,9 @@ import java.util.List;
 public class RecipeResponse {
 
     @SerializedName("results")
-    private List<Recipe> recipes;
+    private List<com.carlosribeiro.culixpress.model.Recipe> recipes;
 
-    public RecipeResponse(List<Recipe> recipes) {
+    public RecipeResponse(List<com.carlosribeiro.culixpress.model.Recipe> recipes) {
         this.recipes = recipes;
     }
 
@@ -17,7 +18,7 @@ public class RecipeResponse {
         return recipes;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
+    public void setRecipes(List<com.carlosribeiro.culixpress.model.Recipe> recipes) {
         this.recipes = recipes;
     }
 }

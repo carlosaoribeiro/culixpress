@@ -14,6 +14,11 @@ public class AuthViewModel extends AndroidViewModel {
 
     private AppDatabase db;
     public MutableLiveData<Boolean> authSuccess = new MutableLiveData<>();
+    public MutableLiveData<Boolean> passwordResetSuccess = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getAuthSuccess() {
+        return authSuccess;
+    }
 
     public AuthViewModel(@NonNull Application application) {
         super(application);
@@ -31,6 +36,13 @@ public class AuthViewModel extends AndroidViewModel {
         Executors.newSingleThreadExecutor().execute(() -> {
             db.userDao().insertUser(user);
             authSuccess.postValue(true);
+        });
+    }
+
+    public void resetPassword(String email, String newPassword) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            int updatedRows = db.userDao().updatePassword(email, newPassword);
+            passwordResetSuccess.postValue(updatedRows > 0);
         });
     }
 }
