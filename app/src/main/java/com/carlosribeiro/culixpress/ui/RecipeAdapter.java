@@ -1,5 +1,6 @@
 package com.carlosribeiro.culixpress.ui.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +14,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.carlosribeiro.culixpress.R;
 import com.carlosribeiro.culixpress.model.Recipe;
-import com.carlosribeiro.culixpress.ui.RecipeDetailsActivity;
+import com.carlosribeiro.culixpress.ui.RecipeDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipeList = new ArrayList<>();
+    private final Context context;
+    private List<Recipe> recipeList;
 
-    public void setRecipeList(List<Recipe> recipes) {
-        this.recipeList = recipes;
-        notifyDataSetChanged();
+    // ✅ Corrigido: Agora aceita `Context` e `List<Recipe>` no construtor
+    public RecipeAdapter(Context context, List<Recipe> recipes) {
+        this.context = context;
+        this.recipeList = recipes != null ? recipes : new ArrayList<>();
     }
 
     @NonNull
@@ -41,22 +44,31 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.title.setText(recipe.getTitle());
 
         Glide.with(holder.itemView.getContext())
-                .load(recipe.getImage())
+                .load(recipe.getImageUrl())
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
                 .into(holder.image);
 
+        // ✅ Adicionando clique para abrir detalhes da receita
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), RecipeDetailsActivity.class);
-            intent.putExtra("recipe_id", recipe.getId()); // Passa o ID da receita
+            Intent intent = new Intent(context, RecipeDetailActivity.class);
+            intent.putExtra("recipe_id", recipe.getId());
             intent.putExtra("recipe_title", recipe.getTitle());
-            intent.putExtra("recipe_image", recipe.getImage());
-            view.getContext().startActivity(intent);
+            intent.putExtra("recipe_image", recipe.getImageUrl());
+            context.startActivity(intent);
         });
     }
-
 
     @Override
     public int getItemCount() {
         return recipeList.size();
+    }
+
+    // ✅ Método para atualizar lista de receitas corretamente
+    public void setRecipeList(List<Recipe> newRecipes) {
+        this.recipeList.clear();
+        this.recipeList.addAll(newRecipes);
+        notifyDataSetChanged();
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {

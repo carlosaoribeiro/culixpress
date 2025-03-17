@@ -76,20 +76,26 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         viewModel.getAuthSuccess().observe(this, success -> {
+            System.out.println("🔍 Login retornou: " + success);
+
             if (success) {
-                Toast.makeText(this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Login bem-sucedido! Abrindo MainActivity...", Toast.LENGTH_SHORT).show();
 
                 String email = loginEmail != null ? loginEmail.getText().toString().trim() : "";
-                String name = "Usuário Padrão"; // Caso não tenha um campo de nome
+                String name = "Usuário Padrão";
 
                 sessionManager.saveUserSession(email, name);
 
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 finish();
             } else {
                 Toast.makeText(this, "Email ou senha incorretos!", Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
         textToRegister.setOnClickListener(view -> {
             startActivity(new Intent(this, RegisterActivity.class));
