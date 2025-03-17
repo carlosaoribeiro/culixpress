@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
 
+    implementation (libs.recyclerview.v121)
 
     implementation (libs.picasso)
 }

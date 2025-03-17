@@ -1,6 +1,8 @@
-package com.carlosribeiro.culixpress.ui.adapters;
+package com.carlosribeiro.culixpress.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.carlosribeiro.culixpress.R;
 import com.carlosribeiro.culixpress.model.Recipe;
-import com.carlosribeiro.culixpress.ui.RecipeDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipeList = new ArrayList<>();
+    private final Context context;
+    private List<Recipe> recipeList;
 
-    public void setRecipeList(List<Recipe> recipes) {
-        this.recipeList = recipes;
-        notifyDataSetChanged();
+    public RecipeAdapter(Context context, List<Recipe> recipes) {
+        this.context = context;
+        this.recipeList = recipes != null ? recipes : new ArrayList<>();
     }
 
     @NonNull
@@ -38,25 +40,40 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
+
+        if (recipe == null) {
+            Log.e("RecipeAdapter", "Erro: Receita é nula!");
+            return;
+        }
+
+
+        Log.d("RecipeAdapter", "Renderizando item: " + recipe.getTitle());
+
         holder.title.setText(recipe.getTitle());
 
         Glide.with(holder.itemView.getContext())
-                .load(recipe.getImage())
+                .load(recipe.getImageUrl())
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
                 .into(holder.image);
 
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), RecipeDetailsActivity.class);
-            intent.putExtra("recipe_id", recipe.getId()); // Passa o ID da receita
-            intent.putExtra("recipe_title", recipe.getTitle());
-            intent.putExtra("recipe_image", recipe.getImage());
-            view.getContext().startActivity(intent);
+            Log.d("RecipeAdapter", "Item clicado: " + recipe.getTitle() + " | ID: " + recipe.getId());
+            Intent intent = new Intent(context, RecipeDetailActivity.class);
+            intent.putExtra("RECIPE", recipe);
+            context.startActivity(intent);
         });
     }
-
 
     @Override
     public int getItemCount() {
         return recipeList.size();
+    }
+
+    public void setRecipeList(List<Recipe> newRecipes) {
+        this.recipeList.clear();
+        this.recipeList.addAll(newRecipes);
+        notifyDataSetChanged();
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {

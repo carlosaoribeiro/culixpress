@@ -5,24 +5,21 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
+    private static volatile AppDatabase instance;
 
     public abstract UserDao userDao();
 
-    private static volatile AppDatabase INSTANCE;
-
     public static AppDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
+        if (instance == null) {
             synchronized (AppDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    AppDatabase.class, "culixpress_db")
-                            .fallbackToDestructiveMigration()
-                            .build();
+                if (instance == null) {
+                    instance = Room.databaseBuilder(context.getApplicationContext(),
+                            AppDatabase.class, "culixpress_db").build();
                 }
             }
         }
-        return INSTANCE;
+        return instance;
     }
 }

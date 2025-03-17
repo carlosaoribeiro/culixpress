@@ -1,8 +1,9 @@
 package com.carlosribeiro.culixpress.model;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class Recipe {
+public class Recipe implements Serializable { // ✅ Implementando Serializable
 
     @SerializedName("id")
     private int id;
@@ -10,9 +11,15 @@ public class Recipe {
     @SerializedName("title")
     private String title;
 
-    @SerializedName("image") // Certifique-se que o nome do campo está certo
+    @SerializedName("image")
     private String imageUrl;
 
+    @SerializedName("instructions")
+    private String instructions;
+
+    public String getInstructions() {
+        return instructions;
+    }
     public Recipe(int id, String title, String imageUrl) {
         this.id = id;
         this.title = title;
@@ -28,6 +35,6 @@ public class Recipe {
     }
 
     public String getImageUrl() {
-        return imageUrl; // ✅ Método correto para recuperar a imagem
+        return imageUrl;
     }
 }

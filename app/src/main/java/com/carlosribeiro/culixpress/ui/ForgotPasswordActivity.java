@@ -39,13 +39,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             viewModel.resetPassword(email, newPassword);
         });
 
-        viewModel.passwordResetSuccess.observe(this, success -> {
+        viewModel.getPasswordResetSuccess().observe(this, success -> {
             if (success) {
                 Toast.makeText(this, "Senha redefinida com sucesso!", Toast.LENGTH_SHORT).show();
-                finish();
+                finish(); // Fecha a tela após redefinir a senha
             } else {
-                Toast.makeText(this, "E-mail não encontrado!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Erro ao redefinir senha. Verifique o email.", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 }

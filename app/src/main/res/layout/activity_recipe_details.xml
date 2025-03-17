@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:padding="50dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="40dp"> <!-- 🔥 Adicionado paddingTop para evitar sobreposição com notch -->
 
         <ImageView
             android:id="@+id/detailRecipeImage"
             android:layout_width="match_parent"
-            android:layout_marginTop="50dp"
-            android:layout_height="200dp"
-            android:contentDescription="Recipe Image"
-            android:scaleType="centerCrop" />
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/placeholder_image" />
 
         <TextView
             android:id="@+id/detailRecipeTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recipe Title"
+            android:text="Título da Receita"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:layout_marginTop="12dp" />
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/detailRecipeInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Instructions"
-            android:layout_marginTop="12dp"
-            android:textSize="16sp" />
+            android:text="Instruções da Receita"
+            android:textSize="16sp"
+            android:paddingTop="12dp"
+            android:paddingBottom="16dp"
+            android:textColor="@android:color/darker_gray" />
+
+        <!-- Botão de Compartilhar -->
+        <Button
+            android:id="@+id/buttonShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compartilhar"
+            android:drawableLeft="@drawable/ic_share"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:padding="10dp"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 </ScrollView>

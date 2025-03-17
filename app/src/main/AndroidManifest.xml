@@ -27,9 +27,9 @@
 
 
 
-        <activity android:name=".ui.RegisterActivity" android:exported="false" />
+        <activity android:name=".ui.RegisterActivity" android:exported="true" />
 
-        <activity android:name=".ui.RecipeDetailActivity" android:exported="false" />
+        <activity android:name=".ui.RecipeDetailActivity" android:exported="true" />
 
         <activity android:name=".ui.MainActivity" android:exported="true" />
 

@@ -9,8 +9,11 @@
     <color name="secondaryColor">#4CAF50</color>
     <color name="hintColor">#673AB7</color>
     <color name="backgroundColor">#4B0DBA</color>
+    <color name="gray">#807D85</color>
+    <color name="light_gray">#A49FAD</color>
     <color name="red">#E91E63</color>
     <color name="purple_700">#673AB7</color>
+    <color name="purple_500">#382064</color>
 
 
 </resources>
