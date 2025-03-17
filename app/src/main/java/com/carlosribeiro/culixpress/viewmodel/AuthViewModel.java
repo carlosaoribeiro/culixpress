@@ -3,6 +3,7 @@ package com.carlosribeiro.culixpress.viewmodel;
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.carlosribeiro.culixpress.data.local.AppDatabase;
@@ -12,12 +13,21 @@ import java.util.concurrent.Executors;
 
 public class AuthViewModel extends AndroidViewModel {
 
-    private AppDatabase db;
-    public MutableLiveData<Boolean> authSuccess = new MutableLiveData<>();
-    public MutableLiveData<Boolean> passwordResetSuccess = new MutableLiveData<>();
+    private final AppDatabase db;
+    private final MutableLiveData<Boolean> authSuccess = new MutableLiveData<>();
+    private final MutableLiveData<User> userData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> passwordResetSuccess = new MutableLiveData<>();
 
-    public MutableLiveData<Boolean> getAuthSuccess() {
+    public LiveData<Boolean> getAuthSuccess() {
         return authSuccess;
+    }
+
+    public LiveData<User> getUserData() {
+        return userData;
+    }
+
+    public LiveData<Boolean> getPasswordResetSuccess() {
+        return passwordResetSuccess;
     }
 
     public AuthViewModel(@NonNull Application application) {
@@ -25,18 +35,28 @@ public class AuthViewModel extends AndroidViewModel {
         db = AppDatabase.getDatabase(application);
     }
 
-    public void login(String email, String password){
+    public void login(String email, String password) {
         Executors.newSingleThreadExecutor().execute(() -> {
             User user = db.userDao().authenticate(email, password);
-            authSuccess.postValue(user != null);
+
+            if (user != null) {
+                userData.postValue(user);
+                authSuccess.postValue(true);
+            } else {
+                authSuccess.postValue(false);
+            }
         });
     }
 
-    public void register(User user){
+    public LiveData<Boolean> register(User user) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
         Executors.newSingleThreadExecutor().execute(() -> {
             db.userDao().insertUser(user);
-            authSuccess.postValue(true);
+            result.postValue(true);
         });
+
+        return result;
     }
 
     public void resetPassword(String email, String newPassword) {

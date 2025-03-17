@@ -1,7 +1,6 @@
 package com.carlosribeiro.culixpress.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.carlosribeiro.culixpress.R;
 import com.carlosribeiro.culixpress.data.local.SessionManager;
 import com.carlosribeiro.culixpress.model.Recipe;
+import com.carlosribeiro.culixpress.ui.adapters.RecipeAdapter;
 import com.carlosribeiro.culixpress.viewmodel.RecipesViewModel;
 
 import java.util.ArrayList;
@@ -33,34 +33,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_main);
 
-        TextView welcomeText = findViewById(R.id.welcomeText);
-
-        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String nomeUsuario = prefs.getString("username", "Usuário"); // "Usuário" é o padrão caso não tenha nome salvo
-
-        welcomeText.setText("Bem-vindo ao CuliXpress, " + nomeUsuario + "!");
-
-
+        // 🔴 Inicializa o SessionManager
         sessionManager = new SessionManager(this);
 
-        // 🔴 Se o usuário não estiver logado, redireciona para Login
+        // 🔴 Se o usuário não estiver logado, redireciona para Login antes de qualquer outra ação
         if (!sessionManager.isUserLoggedIn()) {
-            startActivity(new Intent(this, LoginActivity.class));
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
-            return; // Evita continuar executando código desnecessariamente
+            return;
         }
+
+        // ✅ Recupera o nome do usuário corretamente do SessionManager
+        String nomeUsuario = sessionManager.getUserName();
+
+        // 🔍 Verificar no Logcat se o nome está vindo corretamente
+        System.out.println("🔍 Nome recuperado do SessionManager: " + nomeUsuario);
+
+        // ✅ Configura o texto de boas-vindas
+        TextView welcomeText = findViewById(R.id.welcomeText);
+        welcomeText.setText("Bem-vindo ao CuliXpress, " + nomeUsuario + "!");
 
         // ✅ Configurar RecyclerView corretamente
         recyclerView = findViewById(R.id.recyclerViewRecipes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Adicionado gerenciador de layout
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // 🔥 Inicializando RecipeAdapter com um ArrayList vazio
         recipeAdapter = new RecipeAdapter(this, new ArrayList<>());
         recyclerView.setAdapter(recipeAdapter);
 
         // 🔥 Inicializar ViewModel
         recipesViewModel = new ViewModelProvider(this).get(RecipesViewModel.class);
 
-        // 🔄 Chamar API para buscar receitas e atualizar Adapter
+        // 🔄 Buscar receitas da API e atualizar Adapter
         recipesViewModel.getEasyRecipes(API_KEY).observe(this, recipes -> {
             if (recipes != null && !recipes.isEmpty()) {
                 for (Recipe recipe : recipes) {
@@ -72,11 +78,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 🔴 Corrigido botão Logout
+        // 🔴 Configurar botão de logout corretamente
         Button buttonLogout = findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(view -> {
-            sessionManager.logout();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            sessionManager.logoutUser();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
         });
     }

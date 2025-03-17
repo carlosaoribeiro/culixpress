@@ -43,26 +43,22 @@ public class RegisterActivity extends AppCompatActivity {
             String email = emailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
 
-            if(username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             } else {
-                User user = new User();
-                user.username = username;
-                user.email = email;
-                user.password = password;
-
+                User user = new User(username, email, password);
                 viewModel.register(user);
+
+                viewModel.getAuthSuccess().observe(this, success -> {  // ✅ Agora está dentro do bloco correto
+                    if (success) {
+                        Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+                        finish(); // Volta automaticamente para o login
+                    }
+                });
             }
         });
 
-        AuthViewModel viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        viewModel.getAuthSuccess().observe(this, success -> {
-            if(success){
-                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                finish(); // Volta automaticamente para o login
-            }
-        });
-
-        textToLogin.setOnClickListener(v -> finish());
+                // ✅ Agora o `setOnClickListener` está fechado corretamente!
+                textToLogin.setOnClickListener(v -> finish());
     }
 }
