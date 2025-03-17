@@ -1,11 +1,3 @@
 <resources>
     <string name="app_name">culixpress</string>
-    <string name="e_mail">E-mail</string>
-    <string name="senha">Senha</string>
-    <string name="entrar">Entrar</string>
-    <string name="n_o_tem_uma_conta_cadastre_se">Não tem uma conta? Cadastre-se</string>
-    <string name="app_logo">App Logo</string>
-    <string name="receitas_dispon_veis">Receitas Disponíveis</string>
-    <string name="bem_vindo_usu_rio">Bem-vindo, @Usuário!</string>
-    <string name="imagem_da_receita">Imagem da Receita</string>
 </resources>
