@@ -2,26 +2,28 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="50dp"
-    android:padding="50dp"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:padding="24dp"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center_horizontal"
-        android:paddingTop="40dp"> <!-- 🔥 Adicionado paddingTop para evitar sobreposição com notch -->
+        android:gravity="start">
 
+        <!-- Imagem da Receita -->
         <ImageView
             android:id="@+id/detailRecipeImage"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:src="@drawable/placeholder_image" />
+            android:src="@drawable/placeholder_image"
+            android:contentDescription="@string/recipe_image"
+            android:layout_marginBottom="16dp"/>
 
+        <!-- Título da Receita -->
         <TextView
             android:id="@+id/detailRecipeTitle"
             android:layout_width="match_parent"
@@ -29,32 +31,54 @@
             android:text="Título da Receita"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:paddingTop="8dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
 
+        <!-- Tempo de Preparo -->
+        <TextView
+            android:id="@+id/detailRecipePrepTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⏳ Tempo de preparo: 0 min"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- Quantidade de Porções -->
+        <TextView
+            android:id="@+id/detailRecipeServings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🍽️ Porções: 0"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Instruções da Receita -->
         <TextView
             android:id="@+id/detailRecipeInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Instruções da Receita"
             android:textSize="16sp"
-            android:paddingTop="12dp"
-            android:paddingBottom="16dp"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@android:color/darker_gray"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="16dp"/>
 
         <!-- Botão de Compartilhar -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Compartilhar"
-            android:drawableLeft="@drawable/ic_share"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:icon="@drawable/ic_share"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:padding="10dp"
-            android:backgroundTint="@color/purple_500"
-            android:textColor="@android:color/white"/>
-
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp"/>
     </LinearLayout>
 </ScrollView>

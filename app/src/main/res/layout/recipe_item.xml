@@ -4,7 +4,9 @@
     android:id="@+id/cardRecipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -13,22 +15,63 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="10dp"
+        android:background="@color/white">
 
+        <!-- Imagem da Receita -->
         <ImageView
             android:id="@+id/recipeImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/recipe_image"
+            android:importantForAccessibility="yes" />
 
-        <TextView
-            android:id="@+id/recipeTitle"
+        <!-- Container de Texto -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Título da Receita"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingTop="8dp" />
+            android:orientation="vertical"
+            android:paddingTop="8dp">
+
+            <!-- Título da Receita -->
+            <TextView
+                android:id="@+id/recipeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/t_tulo_da_receita"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:maxLines="2"
+                android:minHeight="48dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true" />
+
+            <!-- Tempo de Preparo ⏳ -->
+            <TextView
+                android:id="@+id/recipePrepTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⏳  Tempo de preparo: 0 min"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:paddingTop="4dp" />
+
+            <!-- Quantidade de Porções 🍽️ -->
+            <TextView
+                android:id="@+id/recipeServings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🍽️  Porções: 0"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:paddingTop="2dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

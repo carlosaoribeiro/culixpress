@@ -1,51 +1,76 @@
 package com.carlosribeiro.culixpress.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.carlosribeiro.culixpress.R;
+import com.carlosribeiro.culixpress.data.local.SessionManager;
 import com.carlosribeiro.culixpress.model.Recipe;
 import com.carlosribeiro.culixpress.ui.adapter.RecipeAdapter;
 import com.carlosribeiro.culixpress.viewmodel.RecipesViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecipesViewModel recipesViewModel;
+    private Button logoutButton;
+    private TextView welcomeText;
+    private RecyclerView recyclerViewRecipes;
     private RecipeAdapter recipeAdapter;
-    private RecyclerView recyclerView;
+    private RecipesViewModel recipesViewModel;
+    private SessionManager sessionManager;
 
-    private final String API_KEY = "95c67c60762f4590a95269477adb067f";
+    private static final String API_KEY = "95c67c60762f4590a95269477adb067f"; // 🔑 Substitua pela sua chave de API válida
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_main);
 
-        recyclerView = findViewById(R.id.recyclerViewRecipes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // 🔥 Inicializando os componentes da UI
+        logoutButton = findViewById(R.id.buttonLogout);
+        recyclerViewRecipes = findViewById(R.id.recyclerViewRecipes);
+        welcomeText = findViewById(R.id.welcomeText);
+        sessionManager = new SessionManager(this);
 
-// 🔥 Certifique-se de que está inicializando corretamente o Adapter
+        // ✅ Obtendo o nome do usuário salvo na sessão
+        String userName = sessionManager.getUserName();
+        welcomeText.setText("Olá, " + (userName != null ? userName : "Usuário") + "!");
+
+        // ✅ Configuração do RecyclerView
+        recyclerViewRecipes.setLayoutManager(new LinearLayoutManager(this));
+
+        // 🛠 Corrigido erro no RecipeAdapter → Agora passamos um contexto e uma lista vazia
         recipeAdapter = new RecipeAdapter(this, new ArrayList<>());
-        recyclerView.setAdapter(recipeAdapter);
+        recyclerViewRecipes.setAdapter(recipeAdapter);
 
-// 🔥 Pegando as receitas e atualizando o Adapter
+        // ✅ Inicializa a ViewModel corretamente
         recipesViewModel = new ViewModelProvider(this).get(RecipesViewModel.class);
-        recipesViewModel.getEasyRecipes(API_KEY).observe(this, recipes -> {
+
+        // 🔥 Garante que a API seja chamada corretamente antes da observação
+        recipesViewModel.loadRecipes(API_KEY);
+
+        // ✅ Observa mudanças nos dados das receitas
+        recipesViewModel.getRecipes().observe(this, recipes -> {
             if (recipes != null && !recipes.isEmpty()) {
-                Log.d("MainActivity", "🔄 Receitas carregadas: " + recipes.size());
-                recipeAdapter.setRecipeList(recipes);
+                Log.d("MainActivity", "Receitas carregadas: " + recipes.size());
+                recipeAdapter.updateList(recipes); // ✅ Atualiza os dados no Adapter
             } else {
-                Log.e("MainActivity", "❌ Nenhuma receita carregada!");
-                Toast.makeText(this, "Nenhuma receita encontrada!", Toast.LENGTH_SHORT).show();
+                Log.e("MainActivity", "Nenhuma receita carregada!");
             }
+        });
+
+        // ✅ Logout do usuário
+        logoutButton.setOnClickListener(view -> {
+            sessionManager.logoutUser();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         });
     }
 }

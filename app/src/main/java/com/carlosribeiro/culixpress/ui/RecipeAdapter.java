@@ -2,20 +2,16 @@ package com.carlosribeiro.culixpress.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.carlosribeiro.culixpress.R;
 import com.carlosribeiro.culixpress.model.Recipe;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,26 +37,27 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
 
-        if (recipe == null) {
-            Log.e("RecipeAdapter", "Erro: Receita é nula!");
-            return;
-        }
-
-
-        Log.d("RecipeAdapter", "Renderizando item: " + recipe.getTitle());
-
         holder.title.setText(recipe.getTitle());
+        holder.prepTime.setText("⏳ Tempo de preparo: " + recipe.getPreparationTime() + " min");
+        holder.servings.setText("🍽️ Porções: " + recipe.getServings());
 
+        // 🔹 Carrega a imagem com Glide
         Glide.with(holder.itemView.getContext())
                 .load(recipe.getImageUrl())
-                .placeholder(R.drawable.placeholder_image)
+                .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error_image)
-                .into(holder.image);
+                .into(holder.recipeImage);
 
+        // 🔹 Evento de clique para abrir os detalhes
         holder.itemView.setOnClickListener(view -> {
-            Log.d("RecipeAdapter", "Item clicado: " + recipe.getTitle() + " | ID: " + recipe.getId());
             Intent intent = new Intent(context, RecipeDetailActivity.class);
-            intent.putExtra("RECIPE", recipe);
+            intent.putExtra("recipeId", recipe.getId());
+            intent.putExtra("title", recipe.getTitle());
+            intent.putExtra("imageUrl", recipe.getImageUrl());
+            intent.putExtra("prepTime", recipe.getPreparationTime());
+            intent.putExtra("servings", recipe.getServings());
+            intent.putExtra("instructions", recipe.getFormattedInstructions());
+
             context.startActivity(intent);
         });
     }
@@ -71,19 +68,23 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public void setRecipeList(List<Recipe> newRecipes) {
-        this.recipeList.clear();
-        this.recipeList.addAll(newRecipes);
-        notifyDataSetChanged();
+        if (newRecipes != null) {
+            this.recipeList.clear();
+            this.recipeList.addAll(newRecipes);
+            notifyDataSetChanged();
+        }
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        ImageView image;
+        TextView title, prepTime, servings;
+        ImageView recipeImage;
 
         RecipeViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.recipeTitle);
-            image = view.findViewById(R.id.recipeImage);
+            prepTime = view.findViewById(R.id.recipePrepTime);
+            servings = view.findViewById(R.id.recipeServings);
+            recipeImage = view.findViewById(R.id.recipeImage);
         }
     }
 }

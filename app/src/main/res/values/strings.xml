@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">culixpress</string>
+    <string name="ola">Olá!</string>
+    <string name="x">X</string>
+    <string name="bem_vindo">Bem-vindo,</string>
+    <string name="sair">Sair</string>
+    <string name="entrar">Entrar</string>
+    <string name="avatar_do_usu_rio">Avatar do usuário</string>
+    <string name="recipe_image" />
+    <string name="t_tulo_da_receita">Título da Receita</string>
 </resources>
