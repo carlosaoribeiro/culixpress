@@ -20,9 +20,13 @@ O aplicativo consome dados de uma API de receitas e possui os seguintes casos de
 ---
 
 ## 📸 **Screenshots**  
-![Captura de Tela 2025-03-19 às 5 21 53 PM](https://github.com/user-attachments/assets/e385a6df-3abb-4156-8e1a-d9324a62eb41)
-![Captura de Tela 2025-03-19 às 5 22 13 PM](https://github.com/user-attachments/assets/9bf7ab6c-3b2d-4980-9986-a759f37d6bf2)
-![Captura de Tela 2025-03-19 às 5 25 39 PM](https://github.com/user-attachments/assets/39f32321-0f15-44b1-a077-42a046eec682)
+
+<img width="349" alt="Captura de Tela 2025-03-26 às 7 17 15 AM" src="https://github.com/user-attachments/assets/28e17e71-0330-47cf-ba9d-3fc296f84806" />
+<img width="351" alt="Captura de Tela 2025-03-26 às 7 17 44 AM" src="https://github.com/user-attachments/assets/36e1aab3-3319-4f1d-993b-fa16a918668f" />
+<img width="379" alt="Captura de Tela 2025-03-26 às 7 18 18 AM" src="https://github.com/user-attachments/assets/49166c13-31d0-4c1e-9e95-109f0fe36073" />
+
+
+
 
 ---
 
